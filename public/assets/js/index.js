@@ -35,14 +35,26 @@ const getNotes = () =>
     }
   });
 
-const saveNote = (note) =>
+const saveNote = (note) => {
+  console.log(note)
   fetch('/api/notes', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(note),
-  });
+  })
+  .then(() => {
+    getAndRenderNotes();
+    renderActiveNote();
+  })
+  .then((data) => {
+    console.log('Successful POST request:', data);
+    return data;
+  })
+  .catch((error) => {
+    console.error('Error in POST request:', error);
+  });}
 
 const deleteNote = (id) =>
   fetch(`/api/notes/${id}`, {
@@ -70,13 +82,16 @@ const renderActiveNote = () => {
 
 const handleNoteSave = () => {
   const newNote = {
-    title: noteTitle.value,
-    text: noteText.value,
+    // title: noteTitle.value,
+    // text: noteText.value,
+    title: 'fsdflfmsf',
+    text: 'sdfkjbskjfs'
   };
-  saveNote(newNote).then(() => {
-    getAndRenderNotes();
-    renderActiveNote();
-  });
+  
+  saveNote(newNote)
+  .then((data) => console.log("DATA: " + data ))
+    .catch((err) => console.error(err));
+
 };
 
 // Delete the clicked note
