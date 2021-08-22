@@ -24,11 +24,10 @@ app.post('/api/notes', (req, res) => {
 
     //Log that a POST request was received
     console.info(`${req.method} request received to add a review`);
-    console.log();
     // Destructuring assignment for the items in req.body
-      const title = req.body;
-      const text = req.body.text;
-  
+      const {title, text} = req.body;
+      
+      // const dbObj = JSON.parse(db);
     // If all the required properties are present
     if (title && text) {
       // Variable for the object we will save
@@ -37,6 +36,9 @@ app.post('/api/notes', (req, res) => {
         text,
         note_id: uuidv4()
       };
+
+      db.push(newNote);
+      fs.writeFile('./db/db.json', JSON.stringify(db) , (err, data) => console.log(err));
   
       const response = {
         status: 'success',
