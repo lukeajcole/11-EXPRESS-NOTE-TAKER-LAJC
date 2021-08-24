@@ -83,14 +83,18 @@ const handleNoteDelete = (e) => {
   e.stopPropagation();
 
   const note = e.target;
-  const noteId = JSON.parse(note.parentElement.getAttribute('data-note')).id;
 
-  if (activeNote.id === noteId) {
+  const noteId = JSON.parse(note.parentElement.getAttribute('data-note')).note_id;
+  console.log(noteId);
+
+  if (activeNote.note_id === noteId) {
     activeNote = {};
-  }
-
+    }
+    console.log("HandleNoteDelete");
   deleteNote(noteId).then(() => {
+    console.log('delete note pre get and render');
     getAndRenderNotes();
+    console.log('delete note pre render active note');
     renderActiveNote();
   });
 };
@@ -119,6 +123,7 @@ const handleRenderSaveBtn = () => {
 // Render the list of note titles
 const renderNoteList = async (notes) => {
   let jsonNotes = await notes.json();
+  console.log('124 jsonNotes: ' + jsonNotes);
   if (window.location.pathname === '/notes') {
     noteList.forEach((el) => (el.innerHTML = ''));
   }

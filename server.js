@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 //Base Page Routes
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/public/index.html')));
+
 
 app.get('/notes', (req, res) => res.sendFile(path.join(__dirname, '/public/notes.html')));
 
@@ -38,20 +38,36 @@ app.post('/api/notes', (req, res) => {
       };
 
       db.push(newNote);
-      fs.writeFile('./db/db.json', JSON.stringify(db) , (err, data) => console.log(err));
+      fs.writeFile('./db/db.json', JSON.stringify(db) , (err) => {
+        err ? console.log("POST Error: " + err): console.log("Successful POST")
+      });
   
       const response = {
         status: 'success',
         body: newNote,
       };
   
-      console.log(response);
+      console.log("POST Res: " + response);
       res.json(response);
     } else {
       res.json('Error in posting review');
     }
   });
 
+app.delete("/api/notes/:id", (req, res) => {
+  db.forEach((note, index) => {
+       let note_id = req.params.id;
+       if (note.note_id == note_id){
+          db.splice(index,1);
+          console.log(`Note ${note.note_id } was deleted`);
+       } 
+  });
+  fs.writeFile('./db/db.json', JSON.stringify(db) , (err) => {
+    err ? console.log("Delete Error: " + err): console.log("Successful Delete")
+  });
+});
+
+  app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/public/index.html')));
 
   app.get('*', (req, res) => res.sendFile(path.join(__dirname, '/public/index.html')));
 
