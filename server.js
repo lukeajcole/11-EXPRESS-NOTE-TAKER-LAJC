@@ -65,6 +65,8 @@ app.delete("/api/notes/:id", (req, res) => {
   fs.writeFile('./db/db.json', JSON.stringify(db) , (err) => {
     err ? console.log("Delete Error: " + err): console.log("Successful Delete")
   });
+
+  res.json({status: 'Deleted'})
 });
 
   app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/public/index.html')));
